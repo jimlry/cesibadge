@@ -1,0 +1,20 @@
+<!DOCTYPE html>
+<html lang="fr">
+<head>
+    <title>Cesi Badge</title>
+    <link rel="stylesheet" href="../static/css/reset.css">    
+    <link rel="stylesheet" href="https://unpkg.com/blaze">
+</head>
+<body>
+    <nav class="c-nav c-nav--inline c-nav--high">
+        <a class="c-nav__item" href="/">Cesi Badge</a>
+        <a class="c-nav__item" href="/badgerlist">Utilisateurs</a>
+        <a class="c-nav__item" href="/roomlist">Salles</a>
+    </nav>
+    <div class="o-container o-container--large u-pillar-box--small">
+    	{% block body %}{% endblock %}
+    </div> 
+    <footer>
+    </footer>
+</body>
+</html>

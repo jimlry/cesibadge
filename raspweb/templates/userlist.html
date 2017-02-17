@@ -1,0 +1,33 @@
+{% extends "base.html" %}
+{% block body %}
+
+<div class="o-container o-container--large u-pillar-box--small">
+    <div class="c-hero">
+        <h1 class="c-heading">Liste des utilisateurs</h1>
+    </div>
+
+    <table class="c-table c-table--striped">
+        <thead class="c-table__head">
+            <tr class="c-table__row c-table__row--heading">
+                <th class="c-table__cell">Id</th>
+                <th class="c-table__cell">Prénom</th>
+                <th class="c-table__cell">Nom</th>
+                <th class="c-table__cell">Qr id</th>
+                <th class="c-table__cell">Groupe</th>
+            </tr>
+        </thead>
+        <tbody class="c-table__body">
+            {% for badger in badgerlist %}
+            <tr class="c-table__row">
+                <td class="c-table__cell">{{ badger.id }}</td>
+                <td class="c-table__cell">{{ badger.firstname }}</td>
+                <td class="c-table__cell">{{ badger.lastname }}</td>
+                <td class="c-table__cell">{{ badger.qr_id }}</td>
+                <td class="c-table__cell">{{ badger.body_id }}</td>
+            </tr>
+            {% endfor %}
+        </tbody>
+    </table>
+</div>
+
+{% endblock %}

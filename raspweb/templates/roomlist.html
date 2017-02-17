@@ -1,0 +1,23 @@
+{% extends "base.html" %}
+{% block body %}
+
+<div class="o-container o-container--large u-pillar-box--small">
+    <div class="c-hero">
+        <h1 class="c-heading">Liste des salles</h1>
+    </div>
+    {% for room in roomlist %}
+    <form method="get" action="/roomplanning">        
+        <div class="c-card">
+            <div class="c-card__item">
+                <div class="o-grid">
+                    <input type="hidden" name="id" value="{{ room.id }}" />
+                    <label class="o-grid__cell--width-20">{{ room.name }}</label>
+                    <button class="o-grid__cell--width-10 o-grid__cell--offset-60 c-button c-button--info" type="submit">Consulter</button>
+                </div>
+            </div>
+        </div>
+    </form>        
+    {% endfor %}
+</div>
+
+{% endblock %}
