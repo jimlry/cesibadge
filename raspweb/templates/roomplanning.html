@@ -3,8 +3,22 @@
 
 <div class="o-container o-container--large u-pillar-box--small">
     <div class="c-hero">
-        <h1 class="c-heading">Planning de la salle</h1>
+        <h1 class="c-heading">Planning de la salle {{ room.name }}</h1>
     </div>
+    <select class="c-field">
+		<option>ril</option>
+	</select>
+    <table class="c-table c-table--striped">
+        <thead class="c-table__head">
+            <tr class="c-table__row c-table__row--heading">
+                <th class="c-table__cell">Lundi</th>
+                <th class="c-table__cell">Mardi</th>
+                <th class="c-table__cell">Mercredi</th>
+                <th class="c-table__cell">Jeudi</th>
+                <th class="c-table__cell">Vendredi</th>
+            </tr>
+        </thead>
+    </table>
 </div>
 
 {% endblock %}

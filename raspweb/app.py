@@ -11,14 +11,15 @@ app.config['MYSQL_DATABASE_DB'] = 'raspberry'
 app.config['MYSQL_DATABASE_HOST'] = '127.0.0.1'
 
 mysql.init_app(app)
+cursor = mysql.connect().cursor()
 
 @app.route('/')
 def main():
+	
 	return render_template('index.html')	
 
 @app.route('/badgerlist')
 def badgerlist():
-	cursor = mysql.connect().cursor()
 	cursor.execute("SELECT * FROM badger")
 	badgerlist = cursor.fetchall()
 
@@ -26,7 +27,6 @@ def badgerlist():
 
 @app.route('/roomlist')
 def roomlist():
-	cursor = mysql.connect().cursor()
 	cursor.execute("SELECT * FROM room")
 	roomlist = cursor.fetchall()
 
@@ -34,8 +34,11 @@ def roomlist():
 
 @app.route('/roomplanning', methods=['GET'])
 def roomplanning():
-	cursor = mysql.connect().cursor()
-	return render_template('roomplanning.html')	
+	roomid = request.args.get('id')
+	cursor.execute("SELECT * FROM room WHERE id='" + roomid + "'")
+	room = cursor.fetchone();
+
+	return render_template('roomplanning.html', room=room)	
 
 if __name__ == '__main__':
 	app.run()
