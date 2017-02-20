@@ -1,17 +1,8 @@
-from flask import Flask, render_template, request
-from flaskext.mysql import MySQL
-from pymysql.cursors import DictCursor
+from raspweb import app
 
-mysql = MySQL(cursorclass=DictCursor)
-app = Flask(__name__)
-
-app.config['MYSQL_DATABASE_USER'] = 'root'
-app.config['MYSQL_DATABASE_PASSWORD'] = 'root'
-app.config['MYSQL_DATABASE_DB'] = 'raspberry'
-app.config['MYSQL_DATABASE_HOST'] = '127.0.0.1'
-
-mysql.init_app(app)
-cursor = mysql.connect().cursor()
+from flask import render_template, request
+import datetime
+import calendar
 
 @app.route('/')
 def main():
@@ -20,9 +11,8 @@ def main():
 
 @app.route('/badgerlist')
 def badgerlist():
-	cursor.execute("SELECT * FROM badger")
-	badgerlist = cursor.fetchall()
-
+	badger = Badger()
+	badgerlist = badger.getBadgerList()
 	return render_template('userlist.html', badgerlist=badgerlist)	
 
 @app.route('/roomlist')
@@ -38,7 +28,21 @@ def roomplanning():
 	cursor.execute("SELECT * FROM room WHERE id='" + roomid + "'")
 	room = cursor.fetchone();
 
-	return render_template('roomplanning.html', room=room)	
+	cursor.execute("SELECT * FROM presence")
+	presenceList = cursor.fetchall()
+
+	cursor.execute("SELECT * FROM badger")
+	badgerList = cursor.fetchall()
+
+	print calendar.TextCalendar(calendar.SUNDAY)
+
+	morningDate = presenceList[1]['morning_date']
+	print morningDate.isoweekday()
+
+	return render_template('roomplanning.html', 
+		room=room,
+		presenceList=presenceList, 
+		badgerList=badgerList)	
 
 if __name__ == '__main__':
 	app.run()
