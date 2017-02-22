@@ -18,5 +18,5 @@ class Badger:
 	def getBadgerList():
 		cursor.execute("SELECT * FROM badger")
 		badgerlist = cursor.fetchall()
-
+		print badgerlist
 		return badgerlist

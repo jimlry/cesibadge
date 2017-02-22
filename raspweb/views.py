@@ -1,12 +1,10 @@
 from raspweb import app
-
 from flask import render_template, request
-import datetime
-import calendar
+import datetime, calendar
+from models import Badger
 
 @app.route('/')
 def main():
-	
 	return render_template('index.html')	
 
 @app.route('/badgerlist')
@@ -19,7 +17,6 @@ def badgerlist():
 def roomlist():
 	cursor.execute("SELECT * FROM room")
 	roomlist = cursor.fetchall()
-
 	return render_template('roomlist.html', roomlist=roomlist)	
 
 @app.route('/roomplanning', methods=['GET'])
