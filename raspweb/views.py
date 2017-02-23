@@ -1,7 +1,7 @@
 from raspweb import app
 from flask import render_template, request
 import datetime, calendar
-from models import Badger
+from models import BadgerModel, RoomModel, PresenceModel
 
 @app.route('/')
 def main():
@@ -9,37 +9,28 @@ def main():
 
 @app.route('/badgerlist')
 def badgerlist():
-	badger = Badger()
-	badgerlist = badger.getBadgerList()
-	return render_template('userlist.html', badgerlist=badgerlist)	
+	badgerModel = BadgerModel()
+	badgerList = badgerModel.getBadgerList()
+	return render_template('userlist.html', badgerList=badgerList)	
 
 @app.route('/roomlist')
 def roomlist():
-	cursor.execute("SELECT * FROM room")
-	roomlist = cursor.fetchall()
-	return render_template('roomlist.html', roomlist=roomlist)	
+	roomModel = RoomModel()
+	roomList = roomModel.getRoomList()
+	return render_template('roomlist.html', roomList=roomList)	
 
 @app.route('/roomplanning', methods=['GET'])
 def roomplanning():
-	roomid = request.args.get('id')
-	cursor.execute("SELECT * FROM room WHERE id='" + roomid + "'")
-	room = cursor.fetchone();
+	roomModel = RoomModel()
+	presenceModel = PresenceModel()
+	badgerModel = BadgerModel()
 
-	cursor.execute("SELECT * FROM presence")
-	presenceList = cursor.fetchall()
-
-	cursor.execute("SELECT * FROM badger")
-	badgerList = cursor.fetchall()
-
-	print calendar.TextCalendar(calendar.SUNDAY)
-
-	morningDate = presenceList[1]['morning_date']
-	print morningDate.isoweekday()
+	roomId = request.args.get('id')
+	room = roomModel.getRoomById(roomId)
+	badgerList = badgerModel.getBadgerList()
+	presenceList = presenceModel.getPresenceList()
 
 	return render_template('roomplanning.html', 
 		room=room,
 		presenceList=presenceList, 
-		badgerList=badgerList)	
-
-if __name__ == '__main__':
-	app.run()
+		badgerList=badgerList)

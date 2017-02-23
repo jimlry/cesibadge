@@ -1,5 +1,4 @@
 from raspweb import app
-
 from flaskext.mysql import MySQL
 from pymysql.cursors import DictCursor
 
@@ -13,10 +12,31 @@ app.config['MYSQL_DATABASE_HOST'] = '127.0.0.1'
 mysql.init_app(app)
 cursor = mysql.connect().cursor()
 
-class Badger:
+class BadgerModel:
 
-	def getBadgerList():
+	def getBadgerList(self):
 		cursor.execute("SELECT * FROM badger")
 		badgerlist = cursor.fetchall()
-		print badgerlist
 		return badgerlist
+
+
+class RoomModel:
+
+	def getRoomList(self):
+		cursor.execute("SELECT * FROM room")
+		roomlist = cursor.fetchall()
+		return roomlist
+
+	def getRoomById(self, roomId):
+		cursor.execute("SELECT * FROM room WHERE id='" + roomId + "'")
+		room = cursor.fetchone();
+		return room
+
+
+class PresenceModel:
+
+	def getPresenceList(self):
+		cursor.execute("SELECT * FROM presence")
+		presenceList = cursor.fetchall()
+		return presenceList
+
