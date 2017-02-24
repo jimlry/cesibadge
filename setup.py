@@ -5,7 +5,7 @@ setup(
     packages=['raspweb'],
     include_package_data=True,
     install_requires=[
-        'flask',
-	'flaskext.mysql'
+        'flask-mysql',
+	'flask'
     ],
 )

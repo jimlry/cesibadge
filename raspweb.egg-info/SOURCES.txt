@@ -1,8 +1,0 @@
-raspweb/__init__.py
-raspweb/models.py
-raspweb/views.py
-raspweb.egg-info/PKG-INFO
-raspweb.egg-info/SOURCES.txt
-raspweb.egg-info/dependency_links.txt
-raspweb.egg-info/requires.txt
-raspweb.egg-info/top_level.txt
