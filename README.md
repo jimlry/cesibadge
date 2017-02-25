@@ -5,7 +5,7 @@
 sudo apt-get install python-pip
 ```
 
-**Installation de virtualenv pour créer un environnement de développement isolé
+**Installation de virtualenv pour créer un environnement de développement isolé**
 ```
 sudo pip install virtualenv
 ```
@@ -24,6 +24,11 @@ virtualenv venv
 **Installation des dépendances du projet**
 ```
 python setup.py develop
+```
+
+**Configuration des variables d'environnement et lancement du serveur**
+```
+sh run.sh
 ```
 
 **Désactivation de l'environnement virtuel**
