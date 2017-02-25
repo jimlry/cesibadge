@@ -1,32 +1,33 @@
 # cesibadge
 
-**Installation**
-
+**Installation de pip**
 ```
 sudo apt-get install python-pip
 ```
 
+**Installation de virtualenv pour créer un environnement de développement isolé
 ```
 sudo pip install virtualenv
 ```
 
-```
-sudo apt-get install python-virtualenv
-```
-
+**Création d'un environnement de développement custom**
 ```
 cd cesibadge
 virtualenv venv
 ```
 
+**Activation de l'environnement virtuel**
 ```
-// pour activer l'environnement virtuel
 . venv/bin/activate
+```
 
-// pour initialiser le projet et les dépendances
+**Installation des dépendances du projet**
+```
 python setup.py develop
+```
 
-//pour désactiver l'environnement virtuel
+**Désactivation de l'environnement virtuel**
+```
 deactivate
 
 ```
