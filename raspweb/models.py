@@ -40,3 +40,10 @@ class PresenceModel:
 		presenceList = cursor.fetchall()
 		return presenceList
 
+
+class BodyModel:
+
+	def getBodyList(self):
+		cursor.execute("SELECT * FROM body")
+		bodyList = cursor.fetchall()
+		return bodyList

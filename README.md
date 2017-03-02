@@ -34,5 +34,4 @@ sh run.sh
 **Désactivation de l'environnement virtuel**
 ```
 deactivate
-
 ```
