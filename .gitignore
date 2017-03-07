@@ -1,4 +1,5 @@
 *.pyc 
 venv/
 .idea/
+.vscode/
 raspweb.egg-info
