@@ -7,11 +7,16 @@
     </div>
 
     <form method="get" action="/roomplanning">
-        <input type="hidden" name="id" value="{{ room.id }}"/>
+        <input 
+            type="hidden" 
+            name="id" 
+            value="{{ room.id }}"/>
         Promotion
-        <select class="o-grid__cell--width-50 c-field">
+        <select 
+            class="o-grid__cell--width-50 c-field"
+            name="body">
             {% for body in bodyList %}
-            <option>{{ body.name }}</option>
+            <option value="{{ body.id }}">{{ body.name }}</option>
             {% endfor %}
         </select>
         <label>Date</label>
@@ -19,7 +24,8 @@
                 class="o-grid__cell--width-50 c-field flatpickr "
                 type="text"
                 placeholder="Select Date.."
-                name="date">
+                name="date"
+                value="{{ datePicked }}">
         <br>
         <button class="c-button c-button--info" type="submit">Filtrer</button>
     </form>
@@ -28,18 +34,24 @@
         <thead class="c-table__head">
             <tr class="c-table__row c-table__row--heading">
                 <th class="c-table__cell">Badger</th>
-                <th class="c-table__cell">Lundi</th>
-                <th class="c-table__cell">Mardi</th>
-                <th class="c-table__cell">Mercredi</th>
-                <th class="c-table__cell">Jeudi</th>
-                <th class="c-table__cell">Vendredi</th>
+                <th class="c-table__cell">Matin</th>
+                <th class="c-table__cell">Après-midi</th>
             </tr>
         </thead>
         <tbody class="c-table__body">
             {% for badger in badgerList %}
-            <tr class="c-table__row">
-                <td class="c-table__cell">{{ badger.firstname }} {{ badger.lastname }}</td>
-            </tr>
+                <tr class="c-table__row">
+                    <td class="c-table__cell">{{ badger.firstname }} {{ badger.lastname }}</td>
+                {% for presence in presenceList %}
+                    {% if badger.id == presence.badger_id %}
+                    <td class="c-table__cell">{{ presence.morning_date }}</td>
+                    {% endif %}
+                    
+                    {% if badger.id == presence.badger_id %}
+                    <td class="c-table__cell">{{ presence.afternoon_date }}</td>
+                    {% endif %}
+                {% endfor %}
+                </tr>
             {% endfor %}
         </tbody>
     </table>

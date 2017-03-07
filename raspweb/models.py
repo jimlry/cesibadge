@@ -19,6 +19,11 @@ class BadgerModel:
 		badgerlist = cursor.fetchall()
 		return badgerlist
 
+	def getBadgerListByBody(self, bodyId):
+		cursor.execute("SELECT * FROM badger WHERE body_id = '" + bodyId + "'")
+		badgerlist = cursor.fetchall()
+		return badgerlist
+
 
 class RoomModel:
 
@@ -28,8 +33,8 @@ class RoomModel:
 		return roomlist
 
 	def getRoomById(self, roomId):
-		cursor.execute("SELECT * FROM room WHERE id='" + roomId + "'")
-		room = cursor.fetchone();
+		cursor.execute("SELECT * FROM room WHERE id = '" + roomId + "'")
+		room = cursor.fetchone()
 		return room
 
 
@@ -37,6 +42,11 @@ class PresenceModel:
 
 	def getPresenceList(self):
 		cursor.execute("SELECT * FROM presence")
+		presenceList = cursor.fetchall()
+		return presenceList
+
+	def getPresenceListByDate(self, date):
+		cursor.execute("SELECT * FROM presence WHERE CAST(morning_date AS DATE) = '" + date + "' OR CAST(afternoon_date AS DATE) = '" + date + "'")
 		presenceList = cursor.fetchall()
 		return presenceList
 

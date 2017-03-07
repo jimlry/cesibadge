@@ -3,7 +3,6 @@ from flask import render_template, request
 import datetime, calendar
 from models import BadgerModel, RoomModel, PresenceModel, BodyModel
 
-
 @app.route('/')
 def main():
     return render_template('index.html')
@@ -29,21 +28,28 @@ def roomplanning():
     presenceModel = PresenceModel()
     badgerModel = BadgerModel()
     bodyModel = BodyModel()
+    presenceList = None
+    datePicked = str(datetime.date.today())
+
+    print datePicked
 
     roomId = request.args.get('id')
 
     if request.args.get('date'):
         datePicked = request.args.get('date')
-        presenceList = presenceModel.getPresenceList()
+    
+    if request.args.get('date'):
+        body = request.args.get('body')
 
-
+    presenceList = presenceModel.getPresenceListByDate(datePicked)
     room = roomModel.getRoomById(roomId)
 
-    badgerList = badgerModel.getBadgerList()
+    badgerList = badgerModel.getBadgerListByBody(body)
     bodyList = bodyModel.getBodyList()
 
     return render_template('roomplanning.html',
                            room=room,
                            presenceList=presenceList,
                            badgerList=badgerList,
-                           bodyList=bodyList)
+                           bodyList=bodyList,
+                           datePicked=datePicked)
