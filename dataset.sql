@@ -1,4 +1,4 @@
-sert into admin (login, password) values ("root", "root");
+insert into admin (login, password) values ("root", "root");
 
 insert into body (name) values ("ril15");
 insert into body (name) values ("professeur");
@@ -20,6 +20,7 @@ insert into room (name) values ("Lyon");
 insert into room (name) values ("Avignon");
 insert into room (name) values ("La Chapelle");
 
-insert into presence (badger_id, room_id, morning_date, afternoon_date) values ("12", "6", "2018-01-01 09:30:00", "2018-01-01 14:30:00");
-insert into presence (badger_id, room_id, morning_date, afternoon_date) values ("11", "6", "2018-01-01 08:30:00", "2018-01-01 13:30:00");
+insert into presence (badger_id, room_id, morning_date, afternoon_date) values ("1", "6", "2017-03-03 09:30:00", "2017-03-03 14:30:00");
+insert into presence (badger_id, room_id, morning_date, afternoon_date) values ("3", "6", "2017-04-04 08:30:00", "2017-04-04 13:30:00");
 
+select * from badger;
