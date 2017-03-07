@@ -30,6 +30,7 @@ def roomplanning():
     bodyModel = BodyModel()
     presenceList = None
     datePicked = str(datetime.date.today())
+    body = '1'
 
     print datePicked
 
