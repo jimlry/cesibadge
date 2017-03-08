@@ -1,0 +1,33 @@
+{% extends "base.html" %}
+{% block body %}
+
+<div class="u-center-block__content">
+    <h1 class="c-heading">Identifiez-vous</h1>
+    {% if error %}
+        {{ error }}
+    {% endif %}
+    <form action="{{ url_for('login') }}" method=post>
+        <div class="o-form-element">
+            <div class="c-input-group c-input-group--stacked">
+                <div class="o-field">
+                    <input 
+                        class="c-field" 
+                        placeholder="Identifiant"
+                        name="login">
+                </div>
+                <div class="o-field">
+                    <input 
+                        class="c-field" 
+                        placeholder="Mot de passe" 
+                        type="password"
+                        name="password">
+                </div>
+            </div>
+        </div>
+        <div class="o-form-element">
+            <button class="c-button c-button--brand c-button--block" type="submit">Login</button>
+        </div>
+    </form>
+</div>
+
+{% endblock %}

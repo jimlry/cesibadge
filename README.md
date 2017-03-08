@@ -12,7 +12,7 @@ sudo pip install virtualenv
 
 **Création d'un environnement de développement custom**
 ```
-cd cesibadge
+cd admin
 virtualenv venv
 ```
 

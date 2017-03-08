@@ -12,6 +12,13 @@ app.config['MYSQL_DATABASE_HOST'] = '127.0.0.1'
 mysql.init_app(app)
 cursor = mysql.connect().cursor()
 
+class AdminModel:
+
+	def getAdminByLoginAndPassword(self, login, password):
+		cursor.execute("SELECT * FROM admin WHERE login = '" + login + "' AND password = '" + password +  "'")
+		admin = cursor.fetchone()
+		return admin
+
 class BadgerModel:
 
 	def getBadgerList(self):

@@ -12,6 +12,16 @@
         <a class="c-nav__item" href="/">Cesi Badge</a>
         <a class="c-nav__item" href="/badgerlist">Utilisateurs</a>
         <a class="c-nav__item" href="/roomlist">Salles</a>
+        {% if session['admin'] %}
+        <a class="c-nav__item c-nav__item--right" href="/logout">
+            Connecté en tant que : {{ session['admin'] }} (se déconnecter)
+        </a>
+        {% else %}
+        <a class="c-nav__item c-nav__item--right" href="/login">
+            Se connecter
+        </a>
+        {% endif %}
+        </a>
     </nav>
     <div class="o-container o-container--large u-pillar-box--small">
     	{% block body %}{% endblock %}
