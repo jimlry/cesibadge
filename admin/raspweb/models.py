@@ -52,8 +52,8 @@ class PresenceModel:
 		presenceList = cursor.fetchall()
 		return presenceList
 
-	def getPresenceListByDate(self, date):
-		cursor.execute("SELECT * FROM presence WHERE CAST(morning_date AS DATE) = '" + date + "' OR CAST(afternoon_date AS DATE) = '" + date + "'")
+	def getPresenceListByDate(self, date, roomId):
+		cursor.execute("SELECT * FROM presence WHERE room_id = '" + roomId + "'AND (CAST(morning_date AS DATE) = '" + date + "' OR CAST(afternoon_date AS DATE) = '" + date + "')")
 		presenceList = cursor.fetchall()
 		return presenceList
 

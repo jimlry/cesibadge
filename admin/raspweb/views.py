@@ -76,15 +76,13 @@ def roomplanning():
     body = '1'
 
     roomId = request.args.get('id')
-
     if request.args.get('date'):
         datePicked = request.args.get('date')
-    
     if request.args.get('body'):
         body = request.args.get('body')
 
     room = roomModel.getRoomById(roomId)
-    presenceList = presenceModel.getPresenceListByDate(datePicked)
+    presenceList = presenceModel.getPresenceListByDate(datePicked, roomId)
     badgerList = badgerModel.getBadgerListByBody(body)
     bodyList = bodyModel.getBodyList()
 
