@@ -6,7 +6,7 @@
         <h1 class="c-heading">Planning de la salle {{ room.name }}</h1>
     </div>
 
-    <form method="get" action="/roomplanning">
+    <form method="get" action="{{ url_for('roomplanning') }}">
         <input 
             type="hidden" 
             name="id" 

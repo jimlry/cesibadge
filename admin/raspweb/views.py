@@ -7,6 +7,11 @@ app.secret_key = os.urandom(24)
 
 @app.route('/')
 def main():
+    return redirect(url_for('index'))
+
+
+@app.route('/index')
+def index():
     return render_template('index.html')
 
 
@@ -14,25 +19,28 @@ def main():
 def login():
     error = None
     adminModel = AdminModel()
+
     if request.method == 'POST':
         login = request.form['login']
         password = request.form['password']
         admin = adminModel.getAdminByLoginAndPassword(login, password)
-        print admin
+    
         if admin is None:
             error = "Identifiant ou Mot de passe invalide"
         else:
             session['logged_in'] = True
             session['admin'] = admin['login']
-            return redirect(url_for('badgerlist'))
+            return redirect(url_for('index'))
 
         error = 'Identifiant Invalide'
     return render_template('login.html', error=error)
+
 
 @app.route('/logout')
 def logout():
     session.pop('admin', None)
     return redirect(url_for('login'))
+
 
 @app.route('/badgerlist')
 def badgerlist():
@@ -75,9 +83,8 @@ def roomplanning():
     if request.args.get('body'):
         body = request.args.get('body')
 
-    presenceList = presenceModel.getPresenceListByDate(datePicked)
     room = roomModel.getRoomById(roomId)
-
+    presenceList = presenceModel.getPresenceListByDate(datePicked)
     badgerList = badgerModel.getBadgerListByBody(body)
     bodyList = bodyModel.getBodyList()
 
