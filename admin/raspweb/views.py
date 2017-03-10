@@ -39,6 +39,7 @@ def login():
 @app.route('/logout')
 def logout():
     session.pop('admin', None)
+    session['logged_in'] = False
     return redirect(url_for('login'))
 
 
