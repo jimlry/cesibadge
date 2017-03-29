@@ -17,7 +17,7 @@ pin_green_number = 1
 picture_name = "scan.jpg"
 wpi.wiringPiSetup()
 wpi.pinMode(1, 1)
-room = "Toulouse"
+room = 1
 
 #-------------------------------------------#
 #----------------SCAN QR CODE---------------#
@@ -44,7 +44,7 @@ def verify_user(qr, picture_name):
         result = qr.data
         qr_id = urllib.urlencode({'id': result})
         #Est-ce que l'utilisateur existe ?
-        isUserValid = (requests.get("http://raspi.com:8002/verify_user", data={'id': qr_id})).text
+        isUserValid = (requests.get("http://raspi.com:5000/verify_user", data={'id': qr_id})).text
         print "USER VALID" + str(isUserValid)
 
         #Si l'utilisateur existe:
@@ -63,7 +63,7 @@ def verify_user(qr, picture_name):
 #-------------------------------------------#
 #Appel l'api qui update la présence de l'utilisateur en base
 def update_presence(isUserValid):
-   responseApi2 = requests.post("http://raspi.com:8002/update_presence", data={'id': isUserValid, 'room': room})
+   responseApi2 = requests.post("http://raspi.com:5000/update_presence", data={'id': isUserValid, 'room': room})
    print "presence updated ? " + str(responseApi2.text)
    blink_green();
 

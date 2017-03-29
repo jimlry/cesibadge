@@ -6,7 +6,7 @@ mysql = MySQL(cursorclass=DictCursor)
 
 app.config['MYSQL_DATABASE_USER'] = 'root'
 app.config['MYSQL_DATABASE_PASSWORD'] = 'root'
-app.config['MYSQL_DATABASE_DB'] = 'raspberry'
+app.config['MYSQL_DATABASE_DB'] = 'mydb'
 app.config['MYSQL_DATABASE_HOST'] = '127.0.0.1'
 
 mysql.init_app(app)
@@ -31,6 +31,11 @@ class BadgerModel:
 		badgerlist = cursor.fetchall()
 		return badgerlist
 
+	def getBadgerIdFromQrId(self, qrId):
+		cursor.execute('Select id from badger WHERE badger.qr_id = "' + qrId + '" ')
+		badgerId = cursor.fetchone()
+		return badgerId
+
 
 class RoomModel:
 
@@ -44,7 +49,6 @@ class RoomModel:
 		room = cursor.fetchone()
 		return room
 
-
 class PresenceModel:
 
 	def getPresenceList(self):
@@ -57,6 +61,13 @@ class PresenceModel:
 		presenceList = cursor.fetchall()
 		return presenceList
 
+	def getPresenceByBadgerId(self, badgerId):
+		cursor.execute("SELECT * FROM presence WHERE badger_id = '" + str(badgerId) + "'")
+		presence = cursor.fetchall()
+		return presence
+
+	def postPresence(self, badgerId, roomId, date):
+		cursor.execute = "INSERT INTO presence (badger_id, room_id, afternoon_date) VALUES (2, 1, now())"
 
 class BodyModel:
 

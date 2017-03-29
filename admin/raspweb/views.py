@@ -1,6 +1,8 @@
+# -*- coding: utf-8 -*-
 from raspweb import app
 from flask import render_template, request, session, url_for, redirect
 from models import BadgerModel, RoomModel, PresenceModel, BodyModel, AdminModel
+import json
 import datetime, calendar, os
 
 app.secret_key = os.urandom(24)
@@ -24,7 +26,7 @@ def login():
         login = request.form['login']
         password = request.form['password']
         admin = adminModel.getAdminByLoginAndPassword(login, password)
-    
+
         if admin is None:
             error = "Identifiant ou Mot de passe invalide"
         else:
@@ -93,3 +95,58 @@ def roomplanning():
                            badgerList=badgerList,
                            bodyList=bodyList,
                            datePicked=datePicked)
+
+
+#Api de verification de l'existence de l'utilisateur en base
+#Si existe: Renvoie id utilisateur
+#Si existe pas: Renvoie "false"
+@app.route('/verify_user', methods=['GET'])
+def verify_user():
+    # Récupération de l'id du qr_code
+    request_param = request.form["id"]
+    qrId = request_param.split("=")[1]
+    # Requete SQL
+    badgerModel = BadgerModel()
+    badgerId = badgerModel.getBadgerIdFromQrId(qrId)
+    if badgerId:
+        return json.dumps(badgerId)
+    else:
+        return json.dumps(False)
+
+
+#Met a jour la table presence de l'utilisateur
+@app.route('/update_presence', methods=['POST'])
+def update_presence():
+    #Récupération de l'id de l'utilisateur a updater
+    print 'REQUEST'
+
+    jsonBadgerId = json.loads(request.form["id"])
+    badgerId = jsonBadgerId["id"]
+
+    roomId = request.form["room"]
+    fieldToUpdate = get_field_to_update()
+
+    #Requete SQL- Varie en fonction de si on est le matin ou l'aprem, et si l'utilisateur
+    #est dans la table présence ou non
+    presenceModel = PresenceModel()
+    result = presenceModel.getPresenceByBadgerId(badgerId)
+
+    print 'insert'
+    presenceModel = PresenceModel()
+    presenceModel.postPresence(badgerId, roomId, fieldToUpdate)
+
+    #Return les résultats
+    return json.dumps(True)
+
+#Permet de savoir si l'utilisateur badge le matin ou l'aprem
+def get_field_to_update():
+    #Récupération de l'heure actuelle
+    now = datetime.datetime.now()
+
+    #On détermine si on est le matin ou l'après midi
+    if now.hour < 12:
+        field_to_update = "morning_date"
+    else:
+        field_to_update = "afternoon_date"
+    return field_to_update
+
