@@ -105,6 +105,7 @@ def verify_user():
     # Récupération de l'id du qr_code
     request_param = request.form["id"]
     qrId = request_param.split("=")[1]
+
     # Requete SQL
     badgerModel = BadgerModel()
     badgerId = badgerModel.getBadgerIdFromQrId(qrId)
@@ -118,8 +119,6 @@ def verify_user():
 @app.route('/update_presence', methods=['POST'])
 def update_presence():
     #Récupération de l'id de l'utilisateur a updater
-    print 'REQUEST'
-
     jsonBadgerId = json.loads(request.form["id"])
     badgerId = jsonBadgerId["id"]
 
@@ -128,15 +127,21 @@ def update_presence():
 
     #Requete SQL- Varie en fonction de si on est le matin ou l'aprem, et si l'utilisateur
     #est dans la table présence ou non
+    #Renvoie True si un update se fait, false si aucun update
     presenceModel = PresenceModel()
-    result = presenceModel.getPresenceByBadgerId(badgerId)
+    presence = presenceModel.getPresenceByBadgerId(badgerId)
+    print presence
 
-    print 'insert'
-    presenceModel = PresenceModel()
-    presenceModel.postPresence(badgerId, roomId, fieldToUpdate)
+    if presence is None:
+        presenceModel = PresenceModel()
+        presenceModel.postPresence(badgerId, roomId, fieldToUpdate)
+        # Return les résultats
+        return json.dumps(True)
+    else:
+        # Return les résultats
+        return json.dumps(False)
 
-    #Return les résultats
-    return json.dumps(True)
+
 
 #Permet de savoir si l'utilisateur badge le matin ou l'aprem
 def get_field_to_update():

@@ -2,7 +2,7 @@ from raspweb import app
 from flaskext.mysql import MySQL
 from pymysql.cursors import DictCursor
 
-mysql = MySQL(cursorclass=DictCursor)
+mysql = MySQL(autocommit = True, cursorclass=DictCursor)
 
 app.config['MYSQL_DATABASE_USER'] = 'root'
 app.config['MYSQL_DATABASE_PASSWORD'] = 'root'
@@ -32,7 +32,7 @@ class BadgerModel:
 		return badgerlist
 
 	def getBadgerIdFromQrId(self, qrId):
-		cursor.execute('Select id from badger WHERE badger.qr_id = "' + qrId + '" ')
+		cursor.execute('Select id from badger WHERE badger.qr_id = "' + qrId + '"')
 		badgerId = cursor.fetchone()
 		return badgerId
 
@@ -63,11 +63,11 @@ class PresenceModel:
 
 	def getPresenceByBadgerId(self, badgerId):
 		cursor.execute("SELECT * FROM presence WHERE badger_id = '" + str(badgerId) + "'")
-		presence = cursor.fetchall()
+		presence = cursor.fetchone()
 		return presence
 
 	def postPresence(self, badgerId, roomId, date):
-		cursor.execute = "INSERT INTO presence (badger_id, room_id, afternoon_date) VALUES (2, 1, now())"
+		cursor.execute('INSERT INTO presence (badger_id, room_id, '+date+') VALUES("' + str(badgerId) + '" ,"' + str(roomId) + '", now())')
 
 class BodyModel:
 
