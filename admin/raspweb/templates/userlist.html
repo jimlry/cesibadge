@@ -1,13 +1,13 @@
 {% extends "base.html" %}
 {% block body %}
 
-<div class="o-container o-container--large u-pillar-box--small">
-    <div class="c-hero">
-        <h1 class="c-heading">Liste des utilisateurs</h1>
-    </div>
+    <div class="o-container o-container--large u-pillar-box--small">
+        <div class="c-hero">
+            <h1 class="c-heading">Liste des utilisateurs</h1>
+        </div>
 
-    <table class="c-table c-table--striped">
-        <thead class="c-table__head">
+        <table class="c-table c-table--striped">
+            <thead class="c-table__head">
             <tr class="c-table__row c-table__row--heading">
                 <th class="c-table__cell">Id</th>
                 <th class="c-table__cell">Prénom</th>
@@ -15,19 +15,86 @@
                 <th class="c-table__cell">Qr id</th>
                 <th class="c-table__cell">Groupe</th>
             </tr>
-        </thead>
-        <tbody class="c-table__body">
+            </thead>
+            <tbody class="c-table__body">
             {% for badger in badgerList %}
-            <tr class="c-table__row">
-                <td class="c-table__cell">{{ badger.id }}</td>
-                <td class="c-table__cell">{{ badger.firstname }}</td>
-                <td class="c-table__cell">{{ badger.lastname }}</td>
-                <td class="c-table__cell">{{ badger.qr_id }}</td>
-                <td class="c-table__cell">{{ badger.body_id }}</td>
-            </tr>
+                <tr class="c-table__row">
+                    <td class="c-table__cell">{{ badger.id }}</td>
+                    <td class="c-table__cell">{{ badger.firstname }}</td>
+                    <td class="c-table__cell">{{ badger.lastname }}</td>
+                    <td class="c-table__cell">{{ badger.qr_id }}</td>
+                    <td class="c-table__cell">{{ badger.body_id }}</td>
+                </tr>
             {% endfor %}
-        </tbody>
-    </table>
-</div>
+            </tbody>
+        </table>
+
+        <table class="c-table c-table--striped">
+            <thead class="c-table__head">
+            <tr class="c-table__row c-table__row--heading">
+                <th class="c-table__cell">Id</th>
+                <th class="c-table__cell">Prénom</th>
+                <th class="c-table__cell">Nom</th>
+                <th class="c-table__cell">Qr id</th>
+                <th class="c-table__cell">Groupe</th>
+            </tr>
+            </thead>
+            <tbody class="c-table__body">
+            {% for badger in badgerBeanList %}
+                <tr class="c-table__row">
+                    <td class="c-table__cell">{{ badger.id }}</td>
+                    <td class="c-table__cell">{{ badger.firstname }}</td>
+                    <td class="c-table__cell">{{ badger.lastname }}</td>
+                    <td class="c-table__cell">{{ badger.qrId }}</td>
+                    <td class="c-table__cell">{{ badger.bodyId }}</td>
+                </tr>
+            {% endfor %}
+            </tbody>
+        </table>
+        <button class="c-button c-button--info c-button--block" type="submit">Ajouter</button>
+
+    </div>
+
+    <div class="c-overlay"></div>
+        <div class="o-modal o-modal--ghost">
+            <form action="{{ url_for('badgerlist') }}" method=post>
+                <div class="o-form-element">
+                    <div class="c-input-group c-input-group--stacked">
+                        <div class="o-field">
+                            <input
+                                class="c-field"
+                                placeholder="Prénom"
+                                type="text"
+                                name="firstname" />
+                        </div>
+                        <div class="o-field">
+                            <input
+                                class="c-field"
+                                placeholder="Nom"
+                                type="text"
+                                name="lastname" />
+                        </div>
+                        <div class="o-field">
+                            <input
+                                class="c-field"
+                                placeholder="QR ID"
+                                type="text"
+                                name="qrId" />
+                        </div>
+                        <div class="o-field">
+                            <input
+                                class="c-field"
+                                placeholder="Body ID"
+                                type="text"
+                                name="bodyId" />
+                        </div>
+                    </div>
+                </div>
+                <div class="o-form-element">
+                    <button class="c-button c-button--brand c-button--block" type="submit">Ajouter</button>
+                </div>
+            </form>
+        </div>
+    </div>
 
 {% endblock %}

@@ -2,6 +2,7 @@
 from raspweb import app
 from flask import render_template, request, session, url_for, redirect
 from models import BadgerModel, RoomModel, PresenceModel, BodyModel, AdminModel
+from beans import BadgerBean
 import json
 import datetime, calendar, os
 
@@ -45,14 +46,26 @@ def logout():
     return redirect(url_for('login'))
 
 
-@app.route('/badgerlist')
+@app.route('/badgerlist', methods=['GET', 'POST'])
 def badgerlist():
     if not session.get('logged_in'):
         return redirect(url_for('login'))
 
     badgerModel = BadgerModel()
+
+    if request.method == 'POST':
+        badgerBean = BadgerBean(
+            0,
+            request.form['firstname'],
+            request.form['lastname'],
+            request.form['qrId'],
+            request.form['bodyId']
+        )
+        badgerModel.postBadger(badgerBean)
+
+    badgerBeanList = badgerModel.getBadgerBeanList()
     badgerList = badgerModel.getBadgerList()
-    return render_template('userlist.html', badgerList=badgerList)
+    return render_template('userlist.html', badgerList=badgerList, badgerBeanList=badgerBeanList)
 
 
 @app.route('/roomlist')
@@ -105,7 +118,6 @@ def verify_user():
     # Récupération de l'id du qr_code
     request_param = request.form["id"]
     qrId = request_param.split("=")[1]
-
     # Requete SQL
     badgerModel = BadgerModel()
     badgerId = badgerModel.getBadgerIdFromQrId(qrId)
@@ -119,6 +131,8 @@ def verify_user():
 @app.route('/update_presence', methods=['POST'])
 def update_presence():
     #Récupération de l'id de l'utilisateur a updater
+    print 'REQUEST'
+
     jsonBadgerId = json.loads(request.form["id"])
     badgerId = jsonBadgerId["id"]
 
@@ -127,21 +141,15 @@ def update_presence():
 
     #Requete SQL- Varie en fonction de si on est le matin ou l'aprem, et si l'utilisateur
     #est dans la table présence ou non
-    #Renvoie True si un update se fait, false si aucun update
     presenceModel = PresenceModel()
-    presence = presenceModel.getPresenceByBadgerId(badgerId)
-    print presence
+    result = presenceModel.getPresenceByBadgerId(badgerId)
 
-    if presence is None:
-        presenceModel = PresenceModel()
-        presenceModel.postPresence(badgerId, roomId, fieldToUpdate)
-        # Return les résultats
-        return json.dumps(True)
-    else:
-        # Return les résultats
-        return json.dumps(False)
+    print 'insert'
+    presenceModel = PresenceModel()
+    presenceModel.postPresence(badgerId, roomId, fieldToUpdate)
 
-
+    # Return les résultats
+    return json.dumps(True)
 
 #Permet de savoir si l'utilisateur badge le matin ou l'aprem
 def get_field_to_update():
