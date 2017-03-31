@@ -50,17 +50,34 @@ class BadgerModel:
         return badgerlist
 
     def getBadgerIdFromQrId(self, qrId):
-        cursor.execute('Select id from badger WHERE badger.qr_id = "' + qrId + '" ')
+        cursor.execute('SELECT id FROM badger WHERE badger.qr_id = "' + qrId + '" ')
         badgerId = cursor.fetchone()
         return badgerId
 
+    def getBadgerListByQrId(self, qrId):
+        cursor.execute('SELECT * FROM badger WHERE badger.qr_id = "' + qrId + '" ')
+        badgerList = cursor.fetchall()
+        badgerBeanList = list()
+
+        for badger in badgerList:
+            badgerBean = BadgerBean(
+                badger.get('id'),
+                badger.get('firstname'),
+                badger.get('lastname'),
+                badger.get('qr_id'),
+                badger.get('body_id')
+            )
+            badgerBeanList.append(badgerBean)
+
+        return badgerBeanList
+
     def postBadger(self, badger):
-        print badger.bodyId
-        query = (" \
-          INSERT INTO badger (firstname, lastname, qr_id, body_id) \
-          VALUES (%s, %s, %s, %s) \
-        ")
-        cursor.execute(query, (badger.firstname, badger.lastname, badger.qrId, badger.bodyId))
+        query = (
+            "INSERT INTO badger (firstname, lastname, qr_id, body_id)"
+            "VALUES (%s, %s, %s, %s)"
+        )
+        data = (badger.firstname, badger.lastname, badger.qrId, badger.bodyId)
+        cursor.execute(query, data)
 
 
 class RoomModel:
@@ -93,7 +110,9 @@ class PresenceModel:
         return presence
 
     def postPresence(self, badgerId, roomId, date):
-        cursor.execute = "INSERT INTO presence (badger_id, room_id, afternoon_date) VALUES (2, 1, now())"
+        cursor.execute(
+            'INSERT INTO presence (badger_id, room_id, ' + date + ') VALUES("' + str(badgerId) + '" ,"' + str(
+                roomId) + '", now())')
 
 
 class BodyModel:

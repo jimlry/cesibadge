@@ -51,21 +51,25 @@ def badgerlist():
     if not session.get('logged_in'):
         return redirect(url_for('login'))
 
+    error = None
     badgerModel = BadgerModel()
 
     if request.method == 'POST':
-        badgerBean = BadgerBean(
-            0,
-            request.form['firstname'],
-            request.form['lastname'],
-            request.form['qrId'],
-            request.form['bodyId']
-        )
-        badgerModel.postBadger(badgerBean)
+        if badgerModel.getBadgerListByQrId(request.form['qrId']) is None:
+            error = "Ce QR ID est déjà utilisé"
+        else:
+            badgerBean = BadgerBean(
+                0,
+                request.form['firstname'],
+                request.form['lastname'],
+                request.form['qrId'],
+                request.form['bodyId']
+            )
+            badgerModel.postBadger(badgerBean)
 
     badgerBeanList = badgerModel.getBadgerBeanList()
     badgerList = badgerModel.getBadgerList()
-    return render_template('userlist.html', badgerList=badgerList, badgerBeanList=badgerBeanList)
+    return render_template('userlist.html', badgerList=badgerList, badgerBeanList=badgerBeanList, error=error)
 
 
 @app.route('/roomlist')
@@ -110,56 +114,40 @@ def roomplanning():
                            datePicked=datePicked)
 
 
-#Api de verification de l'existence de l'utilisateur en base
-#Si existe: Renvoie id utilisateur
-#Si existe pas: Renvoie "false"
 @app.route('/verify_user', methods=['GET'])
 def verify_user():
-    # Récupération de l'id du qr_code
     request_param = request.form["id"]
     qrId = request_param.split("=")[1]
-    # Requete SQL
+
     badgerModel = BadgerModel()
     badgerId = badgerModel.getBadgerIdFromQrId(qrId)
+
     if badgerId:
         return json.dumps(badgerId)
     else:
         return json.dumps(False)
 
 
-#Met a jour la table presence de l'utilisateur
 @app.route('/update_presence', methods=['POST'])
 def update_presence():
-    #Récupération de l'id de l'utilisateur a updater
-    print 'REQUEST'
-
     jsonBadgerId = json.loads(request.form["id"])
     badgerId = jsonBadgerId["id"]
 
     roomId = request.form["room"]
     fieldToUpdate = get_field_to_update()
 
-    #Requete SQL- Varie en fonction de si on est le matin ou l'aprem, et si l'utilisateur
-    #est dans la table présence ou non
     presenceModel = PresenceModel()
     result = presenceModel.getPresenceByBadgerId(badgerId)
-
-    print 'insert'
-    presenceModel = PresenceModel()
     presenceModel.postPresence(badgerId, roomId, fieldToUpdate)
 
-    # Return les résultats
     return json.dumps(True)
 
-#Permet de savoir si l'utilisateur badge le matin ou l'aprem
+
 def get_field_to_update():
-    #Récupération de l'heure actuelle
     now = datetime.datetime.now()
 
-    #On détermine si on est le matin ou l'après midi
     if now.hour < 12:
         field_to_update = "morning_date"
     else:
         field_to_update = "afternoon_date"
     return field_to_update
-
