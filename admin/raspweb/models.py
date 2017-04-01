@@ -1,18 +1,5 @@
-from raspweb import app
-from flaskext.mysql import MySQL
-from pymysql.cursors import DictCursor
 from beans import BadgerBean
-
-mysql = MySQL(cursorclass=DictCursor)
-
-app.config['MYSQL_DATABASE_USER'] = 'root'
-app.config['MYSQL_DATABASE_PASSWORD'] = 'root'
-app.config['MYSQL_DATABASE_DB'] = 'raspberry'
-app.config['MYSQL_DATABASE_HOST'] = '127.0.0.1'
-
-mysql.init_app(app)
-cursor = mysql.connect().cursor()
-
+from raspweb import cursor
 
 class AdminModel:
     def getAdminByLoginAndPassword(self, login, password):

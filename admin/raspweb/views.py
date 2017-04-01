@@ -4,9 +4,8 @@ from flask import render_template, request, session, url_for, redirect
 from models import BadgerModel, RoomModel, PresenceModel, BodyModel, AdminModel
 from beans import BadgerBean
 import json
-import datetime, calendar, os
+import datetime
 
-app.secret_key = os.urandom(24)
 
 @app.route('/')
 def main():
@@ -69,7 +68,7 @@ def badgerlist():
 
     badgerBeanList = badgerModel.getBadgerBeanList()
     badgerList = badgerModel.getBadgerList()
-    return render_template('userlist.html', badgerList=badgerList, badgerBeanList=badgerBeanList, error=error)
+    return render_template('badgerlist.html', badgerList=badgerList, badgerBeanList=badgerBeanList, error=error)
 
 
 @app.route('/roomlist')
