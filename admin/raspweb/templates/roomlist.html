@@ -6,13 +6,13 @@
         <h1 class="c-heading">Liste des salles</h1>
     </div>
     <div class="o-grid o-grid--wrap o-grid--medium-full">
-        {% for room in roomList %}
+        {% for roomBean in roomBeanList %}
         <div class="o-grid__cell o-grid__cell--width-20"  style="padding-top: 1em; padding-bottom: 1em">
             <div class="c-card">
                 <div class="c-card__item">
-                    <p class="u-centered c-paragraph c-text--loud">{{ room.name }}</p>
+                    <p class="u-centered c-paragraph c-text--loud">{{ roomBean.name }}</p>
                     <form method="get" action="/roomplanning">        
-                        <input type="hidden" name="id" value="{{ room.id }}"/>
+                        <input type="hidden" name="id" value="{{ roomBean.id }}"/>
                         <button class="c-button c-button--info c-button--block" type="submit">Consulter</button>
                     </form>
                 </div>

@@ -1,11 +1,20 @@
-from beans import BadgerBean
+from beans import BadgerBean, RoomBean, BodyBean, AdminBean, PresenceBean
 from raspweb import cursor
 
 class AdminModel:
-    def getAdminByLoginAndPassword(self, login, password):
-        cursor.execute("SELECT * FROM admin WHERE login = '" + login + "' AND password = '" + password + "'")
+    def getAdminBeanByLoginAndPassword(self, login, password):
+        query = "SELECT * FROM admin WHERE login = (%s) AND password = (%s)"
+        cursor.execute(query, (login, password))
         admin = cursor.fetchone()
-        return admin
+
+        adminBean = AdminBean(
+            admin.get('id'),
+            admin.get('login'),
+            admin.get('password')
+
+        )
+
+        return adminBean
 
 
 class BadgerModel:
@@ -13,6 +22,7 @@ class BadgerModel:
         cursor.execute("SELECT * FROM badger")
         badgerList = cursor.fetchall()
         badgerBeanList = list()
+        bodyModel = BodyModel()
 
         for badger in badgerList:
             badgerBean = BadgerBean(
@@ -20,21 +30,29 @@ class BadgerModel:
                 badger.get('firstname'),
                 badger.get('lastname'),
                 badger.get('qr_id'),
-                badger.get('body_id')
+                bodyModel.getBodyNameById(badger.get('body_id'))
             )
             badgerBeanList.append(badgerBean)
 
         return badgerBeanList
 
-    def getBadgerList(self):
-        cursor.execute("SELECT * FROM badger")
-        badgerlist = cursor.fetchall()
-        return badgerlist
-
-    def getBadgerListByBody(self, bodyId):
+    def getBadgerBeanListByBody(self, bodyId):
         cursor.execute("SELECT * FROM badger WHERE body_id = '" + bodyId + "'")
-        badgerlist = cursor.fetchall()
-        return badgerlist
+        badgerList = cursor.fetchall()
+        badgerBeanList = list()
+        bodyModel = BodyModel()
+
+        for badger in badgerList:
+            badgerBean = BadgerBean(
+                badger.get('id'),
+                badger.get('firstname'),
+                badger.get('lastname'),
+                badger.get('qr_id'),
+                bodyModel.getBodyNameById(badger.get('body_id'))
+            )
+            badgerBeanList.append(badgerBean)
+
+        return badgerBeanList
 
     def getBadgerIdFromQrId(self, qrId):
         cursor.execute('SELECT id FROM badger WHERE badger.qr_id = "' + qrId + '" ')
@@ -45,6 +63,7 @@ class BadgerModel:
         cursor.execute('SELECT * FROM badger WHERE badger.qr_id = "' + qrId + '" ')
         badgerList = cursor.fetchall()
         badgerBeanList = list()
+        bodyModel = BodyModel()
 
         for badger in badgerList:
             badgerBean = BadgerBean(
@@ -52,7 +71,7 @@ class BadgerModel:
                 badger.get('firstname'),
                 badger.get('lastname'),
                 badger.get('qr_id'),
-                badger.get('body_id')
+                bodyModel.getBodyNameById(badger.get('body_id'))
             )
             badgerBeanList.append(badgerBean)
 
@@ -63,32 +82,69 @@ class BadgerModel:
             "INSERT INTO badger (firstname, lastname, qr_id, body_id)"
             "VALUES (%s, %s, %s, %s)"
         )
-        data = (badger.firstname, badger.lastname, badger.qrId, badger.bodyId)
+        data = (badger.firstname, badger.lastname, badger.qrId, badger.bodyName)
         cursor.execute(query, data)
 
 
 class RoomModel:
-    def getRoomList(self):
+    def getRoomBeanList(self):
         cursor.execute("SELECT * FROM room")
-        roomlist = cursor.fetchall()
-        return roomlist
+        roomList = cursor.fetchall()
+        roomBeanList = list()
 
-    def getRoomById(self, roomId):
-        cursor.execute("SELECT * FROM room WHERE id = '" + roomId + "'")
+        for room in roomList:
+            roomBean = RoomBean(
+                room.get('id'),
+                room.get('name'),
+            )
+            roomBeanList.append(roomBean)
+
+        return roomBeanList
+
+    def getRoomBeanById(self, roomId):
+        query = "SELECT * FROM room WHERE id = (%s)"
+        cursor.execute(query, (roomId))
         room = cursor.fetchone()
-        return room
+        roomBean = RoomBean(
+            room.get('id'),
+            room.get('name')
+        )
+
+        return roomBean
 
 
 class PresenceModel:
-    def getPresenceList(self):
+    def getPresenceBeanList(self):
         cursor.execute("SELECT * FROM presence")
         presenceList = cursor.fetchall()
-        return presenceList
+        presenceBeanList = list()
 
-    def getPresenceListByDate(self, date, roomId):
+        for presence in presenceList:
+            presenceBean = PresenceBean(
+                presence.get('badger_id'),
+                presence.get('room_id'),
+                presence.get('morning_date'),
+                presence.get('afternoon_date')
+            )
+            presenceBeanList.append(presenceBean)
+
+        return presenceBeanList
+
+    def getPresenceBeanListByDate(self, date, roomId):
         cursor.execute(
             "SELECT * FROM presence WHERE room_id = '" + roomId + "'AND (CAST(morning_date AS DATE) = '" + date + "' OR CAST(afternoon_date AS DATE) = '" + date + "')")
         presenceList = cursor.fetchall()
+        presenceBeanList = list()
+
+        for presence in presenceList:
+            presenceBean = PresenceBean(
+                presence.get('badger_id'),
+                presence.get('room_id'),
+                presence.get('morning_date'),
+                presence.get('afternoon_date')
+            )
+            presenceBeanList.append(presenceBean)
+
         return presenceList
 
     def getPresenceByBadgerId(self, badgerId):
@@ -103,7 +159,22 @@ class PresenceModel:
 
 
 class BodyModel:
-    def getBodyList(self):
+    def getBodyBeanList(self):
         cursor.execute("SELECT * FROM body")
         bodyList = cursor.fetchall()
-        return bodyList
+        bodyBeanList = list()
+
+        for body in bodyList:
+            bodyBean = BodyBean(
+                body.get('id'),
+                body.get('name')
+            )
+            bodyBeanList.append(bodyBean)
+
+        return bodyBeanList
+
+    def getBodyNameById(self, bodyId):
+        query = ("SELECT body.name FROM body WHERE id = (%s)")
+        cursor.execute(query, (bodyId))
+        bodyName = cursor.fetchone().get('name')
+        return bodyName

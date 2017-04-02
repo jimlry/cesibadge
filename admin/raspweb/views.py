@@ -25,13 +25,13 @@ def login():
     if request.method == 'POST':
         login = request.form['login']
         password = request.form['password']
-        admin = adminModel.getAdminByLoginAndPassword(login, password)
+        adminBean = adminModel.getAdminBeanByLoginAndPassword(login, password)
 
-        if admin is None:
+        if adminBean is None:
             error = "Identifiant ou Mot de passe invalide"
         else:
             session['logged_in'] = True
-            session['admin'] = admin['login']
+            session['admin'] = adminBean.login
             return redirect(url_for('index'))
 
         error = 'Identifiant Invalide'
@@ -62,13 +62,16 @@ def badgerlist():
                 request.form['firstname'],
                 request.form['lastname'],
                 request.form['qrId'],
-                request.form['bodyId']
+                request.form['bodyName']
             )
             badgerModel.postBadger(badgerBean)
 
     badgerBeanList = badgerModel.getBadgerBeanList()
-    badgerList = badgerModel.getBadgerList()
-    return render_template('badgerlist.html', badgerList=badgerList, badgerBeanList=badgerBeanList, error=error)
+    return render_template(
+        'badgerlist.html',
+        badgerBeanList=badgerBeanList,
+        error=error
+    )
 
 
 @app.route('/roomlist')
@@ -77,8 +80,8 @@ def roomlist():
         return redirect(url_for('login'))
 
     roomModel = RoomModel()
-    roomList = roomModel.getRoomList()
-    return render_template('roomlist.html', roomList=roomList)
+    roomBeanList = roomModel.getRoomBeanList()
+    return render_template('roomlist.html', roomBeanList=roomBeanList)
 
 
 @app.route('/roomplanning', methods=['GET'])
@@ -100,17 +103,19 @@ def roomplanning():
     if request.args.get('body'):
         body = request.args.get('body')
 
-    room = roomModel.getRoomById(roomId)
-    presenceList = presenceModel.getPresenceListByDate(datePicked, roomId)
-    badgerList = badgerModel.getBadgerListByBody(body)
-    bodyList = bodyModel.getBodyList()
+    roomBean = roomModel.getRoomBeanById(roomId)
+    presenceList = presenceModel.getPresenceBeanListByDate(datePicked, roomId)
+    badgerBeanList = badgerModel.getBadgerBeanListByBody(body)
+    bodyBeanList = bodyModel.getBodyBeanList()
 
-    return render_template('roomplanning.html',
-                           room=room,
-                           presenceList=presenceList,
-                           badgerList=badgerList,
-                           bodyList=bodyList,
-                           datePicked=datePicked)
+    return render_template(
+        'roomplanning.html',
+        room=roomBean,
+        presenceList=presenceList,
+        badgerBeanList=badgerBeanList,
+        bodyBeanList=bodyBeanList,
+        datePicked=datePicked
+    )
 
 
 @app.route('/verify_user', methods=['GET'])

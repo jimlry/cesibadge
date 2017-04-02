@@ -1,60 +1,59 @@
 {% extends "base.html" %}
 {% block body %}
 
-<div class="o-container o-container--large u-pillar-box--small">
-    <div class="c-hero">
-        <h1 class="c-heading">Planning de la salle {{ room.name }}</h1>
-    </div>
+    <div class="o-container o-container--large u-pillar-box--small">
+        <div class="c-hero">
+            <h1 class="c-heading">Planning de la salle {{ room.name }}</h1>
+        </div>
 
-    <form method="get" action="{{ url_for('roomplanning') }}">
-        <input 
-            type="hidden" 
-            name="id" 
-            value="{{ room.id }}"/>
-        Promotion
-        <select 
-            class="o-grid__cell--width-50 c-field"
-            name="body">
-            {% for body in bodyList %}
-            <option value="{{ body.id }}">{{ body.name }}</option>
-            {% endfor %}
-        </select>
-        <br>
-        <label>Date</label>
-        <input
+        <form method="get" action="{{ url_for('roomplanning') }}">
+            <input
+                type="hidden"
+                name="id"
+                value="{{ room.id }}"/>
+            Promotion
+            <select
+                class="o-grid__cell--width-50 c-field"
+                name="body">
+                {% for bodyBean in bodyBeanList %}
+                    <option value="{{ bodyBean.id }}">{{ bodyBean.name }}</option>
+                {% endfor %}
+            </select>
+            <br>
+            <label>Date</label>
+            <input
                 class="o-grid__cell--width-50 c-field flatpickr "
                 type="text"
                 placeholder="Select Date.."
                 name="date"
                 value="{{ datePicked }}">
-        <br>
-        <button class="c-button c-button--info" type="submit">Filtrer</button>
-    </form>
+            <br>
+            <button class="c-button c-button--info" type="submit">Filtrer</button>
+        </form>
 
-    <table class="c-table c-table--striped">
-        <thead class="c-table__head">
+        <table class="c-table c-table--striped">
+            <thead class="c-table__head">
             <tr class="c-table__row c-table__row--heading">
                 <th class="c-table__cell">Badger</th>
                 <th class="c-table__cell">Matin</th>
                 <th class="c-table__cell">Après-midi</th>
             </tr>
-        </thead>
-        <tbody class="c-table__body">
-            {% for badger in badgerList %}
+            </thead>
+            <tbody class="c-table__body">
+            {% for badgerBean in badgerBeanList %}
                 <tr class="c-table__row">
-                    <td class="c-table__cell">{{ badger.firstname }} {{ badger.lastname }}</td>
-                {% for presence in presenceList %}
-                    {% if badger.id == presence.badger_id %}
-                    <td class="c-table__cell">{{ presence.morning_date }}</td>
-                    {% endif %}
-                    
-                    {% if badger.id == presence.badger_id %}
-                    <td class="c-table__cell">{{ presence.afternoon_date }}</td>
-                    {% endif %}
-                {% endfor %}
+                    <td class="c-table__cell">{{ badgerBean.firstname }} {{ badgerBean.lastname }}</td>
+                    {% for presence in presenceList %}
+                        {% if badgerBean.id == presence.badger_id %}
+                            <td class="c-table__cell">{{ presence.morning_date }}</td>
+                        {% endif %}
+                        {% if badgerBean.id == presence.badger_id %}
+                            <td class="c-table__cell">{{ presence.afternoon_date }}</td>
+                        {% endif %}
+                    {% endfor %}
                 </tr>
             {% endfor %}
-        </tbody>
-    </table>
-</div>
+            </tbody>
+        </table>
+    </div>
 {% endblock %}
