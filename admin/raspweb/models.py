@@ -37,7 +37,12 @@ class BadgerModel:
         return badgerBeanList
 
     def getBadgerBeanListByBody(self, bodyId):
-        cursor.execute("SELECT * FROM badger WHERE body_id = '" + bodyId + "'")
+        query = (
+            "SELECT * "
+            "FROM badger "
+            "WHERE body_id = (%s) "
+        )
+        cursor.execute(query, (bodyId))
         badgerList = cursor.fetchall()
         badgerBeanList = list()
         bodyModel = BodyModel()
@@ -55,12 +60,22 @@ class BadgerModel:
         return badgerBeanList
 
     def getBadgerIdFromQrId(self, qrId):
-        cursor.execute('SELECT id FROM badger WHERE badger.qr_id = "' + qrId + '" ')
+        query = (
+            "SELECT id "
+            "FROM badger "
+            "WHERE badger.qr_id = (%s) "
+        )
+        cursor.execute(query, (qrId))
         badgerId = cursor.fetchone()
         return badgerId
 
     def getBadgerListByQrId(self, qrId):
-        cursor.execute('SELECT * FROM badger WHERE badger.qr_id = "' + qrId + '" ')
+        query = (
+            "SELECT * "
+            "FROM badger "
+            "WHERE badger.qr_id = (%s) "
+        )
+        cursor.execute(query, (qrId))
         badgerList = cursor.fetchall()
         badgerBeanList = list()
         bodyModel = BodyModel()
@@ -82,8 +97,7 @@ class BadgerModel:
             "INSERT INTO badger (firstname, lastname, qr_id, body_id)"
             "VALUES (%s, %s, %s, %s)"
         )
-        data = (badger.firstname, badger.lastname, badger.qrId, badger.bodyName)
-        cursor.execute(query, data)
+        cursor.execute(query, (badger.firstname, badger.lastname, badger.qrId, badger.bodyName))
 
 
 class RoomModel:
@@ -130,9 +144,15 @@ class PresenceModel:
 
         return presenceBeanList
 
-    def getPresenceBeanListByDate(self, date, roomId):
-        cursor.execute(
-            "SELECT * FROM presence WHERE room_id = '" + roomId + "'AND (CAST(morning_date AS DATE) = '" + date + "' OR CAST(afternoon_date AS DATE) = '" + date + "')")
+    def getPresenceBeanListByDateAndRoomId(self, date, roomId):
+        query = (
+             "SELECT * "
+             "FROM presence "
+             "WHERE room_id = (%s) "
+             "AND (CAST(morning_date AS DATE) = (%s) "
+             "OR CAST(afternoon_date AS DATE) = (%s)) "
+        )
+        cursor.execute(query, (roomId, date, date))
         presenceList = cursor.fetchall()
         presenceBeanList = list()
 
@@ -145,10 +165,15 @@ class PresenceModel:
             )
             presenceBeanList.append(presenceBean)
 
-        return presenceList
+        return presenceBeanList
 
     def getPresenceByBadgerId(self, badgerId):
-        cursor.execute("SELECT * FROM presence WHERE badger_id = '" + str(badgerId) + "'")
+        query = (
+            "SELECT * "
+            "FROM presence "
+            "WHERE badger_id = (%s) "
+        )
+        cursor.execute(query, (badgerId))
         presence = cursor.fetchall()
         return presence
 
@@ -174,7 +199,10 @@ class BodyModel:
         return bodyBeanList
 
     def getBodyNameById(self, bodyId):
-        query = ("SELECT body.name FROM body WHERE id = (%s)")
+        query = (
+            "SELECT body.name "
+            "FROM body "
+            "WHERE id = (%s)")
         cursor.execute(query, (bodyId))
         bodyName = cursor.fetchone().get('name')
         return bodyName

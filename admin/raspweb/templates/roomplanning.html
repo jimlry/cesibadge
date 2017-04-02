@@ -43,12 +43,12 @@
             {% for badgerBean in badgerBeanList %}
                 <tr class="c-table__row">
                     <td class="c-table__cell">{{ badgerBean.firstname }} {{ badgerBean.lastname }}</td>
-                    {% for presence in presenceList %}
-                        {% if badgerBean.id == presence.badger_id %}
-                            <td class="c-table__cell">{{ presence.morning_date }}</td>
+                    {% for presenceBean in presenceBeanList %}
+                        {% if badgerBean.id == presenceBean.badgerId %}
+                            <td class="c-table__cell">{{ presenceBean.morningDate }}</td>
                         {% endif %}
-                        {% if badgerBean.id == presence.badger_id %}
-                            <td class="c-table__cell">{{ presence.afternoon_date }}</td>
+                        {% if badgerBean.id == presenceBean.badgerId %}
+                            <td class="c-table__cell">{{ presenceBean.afternoonDate }}</td>
                         {% endif %}
                     {% endfor %}
                 </tr>

@@ -104,17 +104,17 @@ def roomplanning():
         body = request.args.get('body')
 
     roomBean = roomModel.getRoomBeanById(roomId)
-    presenceList = presenceModel.getPresenceBeanListByDate(datePicked, roomId)
+    presenceBeanList = presenceModel.getPresenceBeanListByDateAndRoomId(datePicked, roomId)
     badgerBeanList = badgerModel.getBadgerBeanListByBody(body)
     bodyBeanList = bodyModel.getBodyBeanList()
 
     return render_template(
         'roomplanning.html',
-        room=roomBean,
-        presenceList=presenceList,
-        badgerBeanList=badgerBeanList,
-        bodyBeanList=bodyBeanList,
-        datePicked=datePicked
+        room = roomBean,
+        presenceBeanList = presenceBeanList,
+        badgerBeanList = badgerBeanList,
+        bodyBeanList = bodyBeanList,
+        datePicked = datePicked
     )
 
 
