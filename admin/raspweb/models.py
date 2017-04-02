@@ -3,18 +3,25 @@ from raspweb import cursor
 
 class AdminModel:
     def getAdminBeanByLoginAndPassword(self, login, password):
-        query = "SELECT * FROM admin WHERE login = (%s) AND password = (%s)"
+        query = (
+            "SELECT * "
+            "FROM admin "
+            "WHERE login = (%s) "
+            "AND password = (%s)"
+        )
         cursor.execute(query, (login, password))
         admin = cursor.fetchone()
+        adminBean = None
+        if admin is None:
+            return adminBean
+        else :
+            adminBean = AdminBean(
+                admin.get('id'),
+                admin.get('login'),
+                admin.get('password')
 
-        adminBean = AdminBean(
-            admin.get('id'),
-            admin.get('login'),
-            admin.get('password')
-
-        )
-
-        return adminBean
+            )
+            return adminBean
 
 
 class BadgerModel:
