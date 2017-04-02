@@ -1,16 +1,16 @@
 class BadgerBean:
-    def __init__(self, id, firstname, lastname, qrId, bodyName):
+    def __init__(self, id, firstname, lastname, qrId, bodyBean):
         self.id = id
         self.firstname = firstname
         self.lastname = lastname
         self.qrId = qrId
-        self.bodyName = bodyName
+        self.bodyBean = bodyBean
 
-    id = 0;
-    firstname = "";
-    lastname = "";
-    qrId = 0;
-    bodyName = "";
+    id = 0
+    firstname = ""
+    lastname = ""
+    qrId = 0
+    bodyBean = None
 
 
 class RoomBean:
@@ -43,13 +43,24 @@ class AdminBean:
 
 
 class PresenceBean:
-    def __init__(self, badgerId, roomId, morningDate, afternoonDate):
-        self.badgerId = badgerId
-        self.roomId = roomId
+    def __init__(self, badgerBean, roomBean, morningDate, afternoonDate):
+        self.badgerBean = badgerBean
+        self.roomBean = roomBean
         self.morningDate = morningDate
         self.afternoonDate = afternoonDate
 
-    badgerId = 0
-    roomId = 0
+    badgerBean = None
+    roomBean = None
     morningDate = ""
     afterNoonDate = ""
+
+
+class PlanningBean:
+    def __init__(self, date, bodyBean, roomBean):
+        self.date = date
+        self.bodyBean = bodyBean
+        self.roomBean = roomBean
+
+    date = ""
+    bodyBean = None
+    roomBean = None

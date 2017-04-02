@@ -44,10 +44,10 @@
                 <tr class="c-table__row">
                     <td class="c-table__cell">{{ badgerBean.firstname }} {{ badgerBean.lastname }}</td>
                     {% for presenceBean in presenceBeanList %}
-                        {% if badgerBean.id == presenceBean.badgerId %}
+                        {% if badgerBean.id == presenceBean.badgerBean.id %}
                             <td class="c-table__cell">{{ presenceBean.morningDate }}</td>
                         {% endif %}
-                        {% if badgerBean.id == presenceBean.badgerId %}
+                        {% if badgerBean.id == presenceBean.badgerBean.id %}
                             <td class="c-table__cell">{{ presenceBean.afternoonDate }}</td>
                         {% endif %}
                     {% endfor %}

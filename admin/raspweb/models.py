@@ -1,4 +1,4 @@
-from beans import BadgerBean, RoomBean, BodyBean, AdminBean, PresenceBean
+from beans import BadgerBean, RoomBean, BodyBean, AdminBean, PresenceBean, PlanningBean
 from raspweb import cursor
 
 class AdminModel:
@@ -25,6 +25,25 @@ class AdminModel:
 
 
 class BadgerModel:
+    def getBadgerBeanById(self, badgerId):
+        query = (
+            "SELECT * "
+            "FROM badger "
+            "WHERE id = (%s)")
+        cursor.execute(query, (badgerId))
+        badger = cursor.fetchone()
+        bodyModel = BodyModel()
+
+        badgerBean = BadgerBean(
+            badger.get('id'),
+            badger.get('firstname'),
+            badger.get('lastname'),
+            badger.get('qr_id'),
+            bodyModel.getBodyBeanById(badger.get('body_id'))
+        )
+
+        return badgerBean
+
     def getBadgerBeanList(self):
         cursor.execute("SELECT * FROM badger")
         badgerList = cursor.fetchall()
@@ -37,13 +56,13 @@ class BadgerModel:
                 badger.get('firstname'),
                 badger.get('lastname'),
                 badger.get('qr_id'),
-                bodyModel.getBodyNameById(badger.get('body_id'))
+                bodyModel.getBodyBeanById(badger.get('body_id'))
             )
             badgerBeanList.append(badgerBean)
 
         return badgerBeanList
 
-    def getBadgerBeanListByBody(self, bodyId):
+    def getBadgerBeanListByBodyId(self, bodyId):
         query = (
             "SELECT * "
             "FROM badger "
@@ -139,11 +158,13 @@ class PresenceModel:
         cursor.execute("SELECT * FROM presence")
         presenceList = cursor.fetchall()
         presenceBeanList = list()
+        badgerModel = BadgerModel()
+        roomModel = RoomModel()
 
         for presence in presenceList:
             presenceBean = PresenceBean(
-                presence.get('badger_id'),
-                presence.get('room_id'),
+                badgerModel.getBadgerBeanById(presence.get('badger_id')),
+                roomModel.getRoomBeanById(presence.get('room_id')),
                 presence.get('morning_date'),
                 presence.get('afternoon_date')
             )
@@ -162,11 +183,13 @@ class PresenceModel:
         cursor.execute(query, (roomId, date, date))
         presenceList = cursor.fetchall()
         presenceBeanList = list()
+        badgerModel = BadgerModel()
+        roomModel = RoomModel()
 
         for presence in presenceList:
             presenceBean = PresenceBean(
-                presence.get('badger_id'),
-                presence.get('room_id'),
+                badgerModel.getBadgerBeanById(presence.get('badger_id')),
+                roomModel.getRoomBeanById(presence.get('room_id')),
                 presence.get('morning_date'),
                 presence.get('afternoon_date')
             )
@@ -213,3 +236,43 @@ class BodyModel:
         cursor.execute(query, (bodyId))
         bodyName = cursor.fetchone().get('name')
         return bodyName
+
+    def getBodyBeanById(self, bodyId):
+        query = (
+            "SELECT * "
+            "FROM body "
+            "WHERE id = (%s)")
+        cursor.execute(query, (bodyId))
+        body = cursor.fetchone()
+
+        bodyBean = BodyBean(
+            body.get('id'),
+            body.get('name')
+        )
+
+        return bodyBean
+
+
+class PlanningModel:
+    def getPlanningBeanListByBodyIdAndRoomId(self, bodyId, roomId):
+        query = (
+            "SELECT * "
+            "FROM planning "
+            "WHERE body_id = (%s) "
+            "AND  room_id = (%s) "
+        )
+        cursor.execute(query, (bodyId, roomId))
+        planningList = cursor.fetchall()
+        planningBeanList = list()
+        bodyModel = BodyModel()
+        roomModel = RoomModel()
+
+        for planning in planningList:
+            planningBean = PlanningBean(
+                planning.get('date'),
+                bodyModel.getBodyBeanById(planning.get('body_id')),
+                roomModel.getRoomBeanById(planning.get('room_id'))
+            )
+            planningBeanList.append(planningBean)
+
+        return planningBeanList

@@ -105,7 +105,7 @@ def roomplanning():
 
     roomBean = roomModel.getRoomBeanById(roomId)
     presenceBeanList = presenceModel.getPresenceBeanListByDateAndRoomId(datePicked, roomId)
-    badgerBeanList = badgerModel.getBadgerBeanListByBody(body)
+    badgerBeanList = badgerModel.getBadgerBeanListByBodyId(body)
     bodyBeanList = bodyModel.getBodyBeanList()
 
     return render_template(
