@@ -276,3 +276,20 @@ class PlanningModel:
             planningBeanList.append(planningBean)
 
         return planningBeanList
+
+    def getPlanningBeanList(self):
+        cursor.execute("SELECT * FROM planning")
+        planningList = cursor.fetchall()
+        planningBeanList = list()
+        bodyModel = BodyModel()
+        roomModel = RoomModel()
+
+        for planning in planningList:
+            planningBean = PlanningBean(
+                planning.get('date'),
+                bodyModel.getBodyBeanById(planning.get('body_id')),
+                roomModel.getRoomBeanById(planning.get('room_id'))
+            )
+            planningBeanList.append(planningBean)
+
+        return planningBeanList

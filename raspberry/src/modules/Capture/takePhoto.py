@@ -2,8 +2,8 @@
 #! /usr/bin/env python
 import  picamera
 import takePhoto_method
-camera = picamera.PiCamera()
 
+camera = picamera.PiCamera()
 delay = 3
 
 while True:

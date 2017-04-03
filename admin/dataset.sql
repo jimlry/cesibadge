@@ -23,4 +23,4 @@ insert into room (name) values ("La Chapelle");
 insert into presence (badger_id, room_id, morning_date, afternoon_date) values ("1", "6", "2017-03-03 09:30:00", "2017-03-03 14:30:00");
 insert into presence (badger_id, room_id, morning_date, afternoon_date) values ("3", "6", "2017-04-04 08:30:00", "2017-04-04 13:30:00");
 
-select * from badger;
+insert into planning (date, body_id, room_id) value ("2017-03-03", "1", "6")

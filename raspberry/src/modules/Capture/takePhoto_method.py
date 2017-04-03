@@ -6,11 +6,11 @@ import urllib
 from time import sleep
 import wiringpi as wpi
 import requests
+import sqlite3
 
+db = sqlite3.connect('raspberry.db')
+cursor = db.cursor()
 
-#--------------------------------------------#
-#-----------------CONSTANTES-----------------#
-#--------------------------------------------#
 blink_delay = 2
 pin_orange_number = 0
 pin_green_number = 1
@@ -19,12 +19,7 @@ wpi.wiringPiSetup()
 wpi.pinMode(1, 1)
 room = 1
 
-#-------------------------------------------#
-#----------------SCAN QR CODE---------------#
-#-------------------------------------------#
-#Méthode principale: Scan du qr code
-#camera = la camera a utilser
-#delay = La durée de prise entre 2 images
+
 def scan_qr_code(camera, delay):
     camera.capture(picture_name)
     qr = qrtools.QR()
@@ -32,12 +27,7 @@ def scan_qr_code(camera, delay):
     verify_user(qr, picture_name)
     sleep(delay)
 
-#-------------------------------------------#
-#----------------VERIFY USER----------------#
-#-------------------------------------------#
-#Méthode de vérification de l'utilisateur
-#qr = objet permettant le décryptage du qr code
-#picture_name = nom des images que prend la camera
+
 def verify_user(qr, picture_name):
     #Décodage QR CODE
     if qr.decode(picture_name):
@@ -58,19 +48,17 @@ def verify_user(qr, picture_name):
         print "QR CODE NON RECONNU"
         return "false"
 
-#-------------------------------------------#
-#--------------UPDATE PRESENCE--------------#
-#-------------------------------------------#
-#Appel l'api qui update la présence de l'utilisateur en base
+
 def update_presence(isUserValid):
    responseApi2 = requests.post("http://raspi.com:5000/update_presence", data={'id': isUserValid, 'room': room})
    print "presence updated ? " + str(responseApi2.text)
    blink_green();
 
-#-------------------------------------------#
-#----------------BLINK GREEN----------------#
-#-------------------------------------------#
-#Clignotement de la led verte
+
+def getplanning():
+    planning = (requests.get("http://raspi.com:5000/getplanning"))
+
+
 def blink_green():
     wpi.pinMode(pin_green_number, 1)
     wpi.digitalWrite(pin_green_number, 1)
@@ -78,10 +66,6 @@ def blink_green():
     wpi.digitalWrite(pin_green_number, 0)
 
 
-#-------------------------------------------#
-#----------------BLINK ORANGE----------------#
-#-------------------------------------------#
-#Clignotement de la led orange
 def blink_orange():
     wpi.pinMode(pin_orange_number, 1)
     wpi.digitalWrite(pin_orange_number, 1)

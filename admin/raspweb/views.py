@@ -1,7 +1,7 @@
 # -*- coding: utf-8 -*-
 from raspweb import app
 from flask import render_template, request, session, url_for, redirect
-from models import BadgerModel, RoomModel, PresenceModel, BodyModel, AdminModel
+from models import BadgerModel, RoomModel, PresenceModel, BodyModel, AdminModel, PlanningModel
 from beans import BadgerBean
 import json
 import datetime
@@ -116,6 +116,16 @@ def roomplanning():
         bodyBeanList = bodyBeanList,
         datePicked = datePicked
     )
+
+
+@app.route('/getplanning', methods=['GET'])
+def getplanning():
+    planningModel = PlanningModel()
+    planningBeanList = planningModel.getPlanningBeanList()
+
+    return json.dumps([
+        badgerBean.dump() for badgerBean in planningBeanList
+    ])
 
 
 @app.route('/verify_user', methods=['GET'])

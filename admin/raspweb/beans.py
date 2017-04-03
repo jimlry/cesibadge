@@ -21,6 +21,14 @@ class RoomBean:
     id = 0
     name = ""
 
+    def dump(self):
+        return {
+            "RoomBean": {
+                "id": self.id,
+                "name": self.name
+            }
+        }
+
 
 class BodyBean:
     def __init__(self, id, name):
@@ -29,6 +37,14 @@ class BodyBean:
 
     id = 0
     name = ""
+
+    def dump(self):
+        return {
+            "BodyBean": {
+                "id": self.id,
+                "name": self.name
+            }
+        }
 
 
 class AdminBean:
@@ -64,3 +80,12 @@ class PlanningBean:
     date = ""
     bodyBean = None
     roomBean = None
+
+    def dump(self):
+        return {
+            "PlanningBean" : {
+                "date" : str(self.date),
+                "bodyBean" : self.bodyBean.dump(),
+                "roomBean" : self.roomBean.dump()
+            }
+        }
