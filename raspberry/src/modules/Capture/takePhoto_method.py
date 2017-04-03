@@ -46,7 +46,7 @@ def verify_user(qr, picture_name):
             blink_orange();
     else:
         print "QR CODE NON RECONNU"
-        return "false"
+        return " Utilisateur pas en base"
 
 
 def update_presence(isUserValid):

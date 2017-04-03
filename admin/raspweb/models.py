@@ -1,5 +1,6 @@
 from beans import BadgerBean, RoomBean, BodyBean, AdminBean, PresenceBean, PlanningBean
 from raspweb import cursor
+from raspweb import conn
 
 class AdminModel:
     def getAdminBeanByLoginAndPassword(self, login, password):
@@ -211,6 +212,9 @@ class PresenceModel:
         cursor.execute(
             'INSERT INTO presence (badger_id, room_id, ' + date + ') VALUES("' + str(badgerId) + '" ,"' + str(
                 roomId) + '", now())')
+        conn.commit()
+
+
 
 
 class BodyModel:

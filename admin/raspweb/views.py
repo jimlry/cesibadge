@@ -147,14 +147,16 @@ def update_presence():
     jsonBadgerId = json.loads(request.form["id"])
     badgerId = jsonBadgerId["id"]
 
-    roomId = request.form["room"]
+    roomId = json.loads(request.form["room"])
     fieldToUpdate = get_field_to_update()
 
     presenceModel = PresenceModel()
-    result = presenceModel.getPresenceByBadgerId(badgerId)
-    presenceModel.postPresence(badgerId, roomId, fieldToUpdate)
-
-    return json.dumps(True)
+    presence = presenceModel.getPresenceByBadgerId(badgerId)
+    if presence:
+        return json.dumps(False)
+    else:
+        presenceModel.postPresence(badgerId, roomId, fieldToUpdate)
+        return json.dumps(True)
 
 
 def get_field_to_update():

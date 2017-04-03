@@ -17,6 +17,7 @@ app.config.update(dict(
 
 db = MySQL(cursorclass=DictCursor)
 db.init_app(app)
-cursor = db.connect().cursor()
+conn = db.connect()
+cursor = conn.cursor()
 
 from raspweb import views
